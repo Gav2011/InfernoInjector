@@ -4,7 +4,6 @@
         Title="Select Process" Height="400" Width="600">
 
     <Grid>
-        <!-- TextBlock as the placeholder -->
         <TextBlock x:Name="PlaceholderText" 
                    Text="Search by name..." 
                    VerticalAlignment="Center" 

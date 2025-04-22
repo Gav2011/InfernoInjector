@@ -2,8 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -64,16 +65,82 @@ namespace InfernoInjector
         public MainWindow()
         {
             InitializeComponent();
-            CheckUpdate();
+            CheckForUpdatesAsync();
             LoadLoadout();
             this.Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/fire.ico"));
         }
 
-        //https://raw.githubusercontent.com/Gav2011/Versions/refs/heads/main/InfernoInjector
-        private static void CheckUpdate()
+        public static async Task CheckForUpdatesAsync()
         {
-            //   version is 1.0 check this link to check for update message this version and the one from the link  and ask update?
+            const string CurrentVersion = "1.0";
+            const string VersionFileUrl = "https://raw.githubusercontent.com/Gav2011/Versions/refs/heads/main/InfernoInjector";
+            const string LatestReleaseUrl = "https://github.com/Gav2011/InfernoInjector/releases/latest/download/InfernoInjector.exe";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string latestVersion = (await client.GetStringAsync(VersionFileUrl)).Trim();
+
+                    if (latestVersion != CurrentVersion)
+                    {
+                        MessageBoxResult result = MessageBox.Show(
+                            $"A new version ({latestVersion}) is available.\nDo you want to update now?",
+                            "Update Available",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Information);
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                            string exeDir = Path.GetDirectoryName(exePath);
+                            string updatePath = Path.Combine(exeDir, "InfernoInjector.exe");
+                            string vbsPath = Path.Combine(exeDir, "update.vbs");
+
+                            MessageBox.Show($"{vbsPath}");
+                            string vbs = $@"
+Set WshShell = CreateObject(""WScript.Shell"")
+WshShell.Run ""cmd /c taskkill /f /im InfernoInjector.exe"", 0, True
+WScript.Sleep 5000 ' Increased sleep time to ensure process is killed
+Set fso = CreateObject(""Scripting.FileSystemObject"")
+If fso.FileExists(""{exePath}"") Then
+    fso.DeleteFile ""{exePath}"", True
+Else
+    WshShell.Popup ""Old executable not found"", 0, ""Debug"", 0
+End If
+Set objXML = CreateObject(""WinHTTP.WinHTTPRequest.5.1"")
+objXML.Open ""GET"", ""{LatestReleaseUrl}"", False
+objXML.Send
+Set objStream = CreateObject(""ADODB.Stream"")
+objStream.Open
+objStream.Type = 1 ' Binary
+objStream.Write objXML.ResponseBody
+objStream.SaveToFile ""{updatePath}"", 2 ' Overwrite
+objStream.Close
+WshShell.Run ""{updatePath}"", 0, False
+WScript.Sleep 2000
+fso.DeleteFile ""{vbsPath}"", True
+";
+
+                            File.WriteAllText(vbsPath, vbs);
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = "wscript.exe",
+                                Arguments = $"\"{vbsPath}\"",
+                                CreateNoWindow = true,
+                                UseShellExecute = false
+                            });
+                            Application.Current.Shutdown();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error checking for updates:\n{ex.Message}", "Update Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
         private void LoadLoadout()
         {
