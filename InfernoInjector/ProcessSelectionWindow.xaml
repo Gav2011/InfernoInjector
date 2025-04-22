@@ -1,0 +1,42 @@
+﻿<Window x:Class="InfernoInjector.ProcessSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Select Process" Height="400" Width="600">
+
+    <Grid>
+        <!-- TextBlock as the placeholder -->
+        <TextBlock x:Name="PlaceholderText" 
+                   Text="Search by name..." 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Left" 
+                   Margin="15,0,0,0" 
+                   Foreground="Gray" 
+                   IsHitTestVisible="False"/>
+
+        <!-- TextBox for user to type in the search -->
+        <TextBox x:Name="SearchTextBox" 
+                 VerticalAlignment="Top" 
+                 HorizontalAlignment="Left" 
+                 Margin="10,0,10,0" 
+                 Height="30" 
+                 Width="200" 
+                 TextChanged="SearchTextBox_TextChanged"/>
+
+        <!-- ListView to display processes -->
+        <ListView x:Name="ProcessesListView" 
+                  Margin="10,50,10,10" 
+                  SelectionMode="Single" 
+                  MouseDoubleClick="ProcessesListView_MouseDoubleClick">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Process Name" 
+                                    DisplayMemberBinding="{Binding ProcessName}" 
+                                    Width="300"/>
+                    <GridViewColumn Header="PID" 
+                                    DisplayMemberBinding="{Binding Id}" 
+                                    Width="100"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
