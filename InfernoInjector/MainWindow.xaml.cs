@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -338,6 +340,24 @@ fso.DeleteFile ""{vbsPath}"", True
         {
             try
             {
+                try
+                {
+                    FileInfo fileInfo = new FileInfo(DLLPath);
+                    FileSecurity fileSecurity = fileInfo.GetAccessControl();
+                    fileSecurity.AddAccessRule(
+                        new FileSystemAccessRule(
+                            new SecurityIdentifier("S-1-15-2-1"),
+                            FileSystemRights.FullControl,
+                            InheritanceFlags.None,
+                            PropagationFlags.NoPropagateInherit,
+                            AccessControlType.Allow));
+                    fileInfo.SetAccessControl(fileSecurity);
+                }
+                catch (Exception accessEx)
+                {
+                    TECTIC($"Failed to set access control: {accessEx.Message}");
+                    return;
+                }
                 var process = Process.GetProcessById(ProcessID);
                 foreach (ProcessModule module in process.Modules)
                 {
