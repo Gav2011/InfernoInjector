@@ -74,7 +74,7 @@ namespace InfernoInjector
 
         public static async Task CheckForUpdatesAsync()
         {
-            const string CurrentVersion = "1.1";
+            const string CurrentVersion = "1.2";
             const string VersionFileUrl = "https://raw.githubusercontent.com/Gav2011/Versions/refs/heads/main/InfernoInjector";
             const string LatestReleaseUrl = "https://github.com/Gav2011/InfernoInjector/releases/latest/download/InfernoInjector.exe";
 
@@ -98,8 +98,6 @@ namespace InfernoInjector
                             string exeDir = Path.GetDirectoryName(exePath);
                             string updatePath = Path.Combine(exeDir, "InfernoInjector.exe");
                             string vbsPath = Path.Combine(exeDir, "update.vbs");
-
-                            MessageBox.Show($"{vbsPath}");
                             string vbs = $@"
 Set WshShell = CreateObject(""WScript.Shell"")
 WshShell.Run ""cmd /c taskkill /f /im InfernoInjector.exe"", 0, True
