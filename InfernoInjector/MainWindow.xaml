@@ -5,7 +5,8 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        Icon="fire.ico">
+        Icon="fire.ico"
+        ResizeMode="NoResize">
     <Window.Effect>
         <DropShadowEffect Color="Black" Direction="270" ShadowDepth="10" BlurRadius="15" Opacity="0.3"/>
     </Window.Effect>
@@ -43,7 +44,7 @@
         <TextBox x:Name="DllPathTextBox" Background="#333" Foreground="White" BorderBrush="#4CAF50" FontSize="14" Padding="8" Margin="308,84,16,331"/>
         <Button Content="Select DLL" Height="30" Margin="309,124,16,296" Background="#4CAF50" Foreground="White" FontWeight="Bold" Click="SelectDllButton_Click"/>
 
-        <TextBlock Text="Inferno Injector By Gavin" Foreground="White" Margin="408,10,30,420" FontSize="14"/>
+        <TextBlock Text="Inferno Injector By Gav2011" Foreground="White" Margin="408,10,30,420" FontSize="14"/>
 
         <Button x:Name="InjectButton" Margin="10,390,443,10" Background="#FF489B5E" IsEnabled="False" Click="InjectButton_Click">
             <Button.Template>

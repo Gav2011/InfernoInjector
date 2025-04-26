@@ -74,7 +74,7 @@ namespace InfernoInjector
 
         public static async Task CheckForUpdatesAsync()
         {
-            const string CurrentVersion = "1.2";
+            const string CurrentVersion = "1.0";
             const string VersionFileUrl = "https://raw.githubusercontent.com/Gav2011/Versions/refs/heads/main/InfernoInjector";
             const string LatestReleaseUrl = "https://github.com/Gav2011/InfernoInjector/releases/latest/download/InfernoInjector.exe";
 
