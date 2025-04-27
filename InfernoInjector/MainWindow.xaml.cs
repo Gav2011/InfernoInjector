@@ -141,7 +141,6 @@ fso.DeleteFile ""{vbsPath}"", True
             }
         }
 
-
         private void LoadLoadout()
         {
             try
@@ -241,6 +240,7 @@ fso.DeleteFile ""{vbsPath}"", True
 
         private void UnInjectButton_Click(object sender, RoutedEventArgs e)
         {
+            TECTIC("Uninjected pressed");
             string dllPath = DllPathTextBox.Text;
             if (string.IsNullOrWhiteSpace(ProcessIdTextBox.Text) || string.IsNullOrWhiteSpace(dllPath))
             {
@@ -255,11 +255,12 @@ fso.DeleteFile ""{vbsPath}"", True
                 return;
             }
 
-            System.Threading.Tasks.Task.Run(() => Uninject(dllPath, process.Id));
+            Uninject(dllPath, process.Id);
         }
 
         private void InjectButton_Click(object sender, RoutedEventArgs e)
         {
+            TECTIC("injected pressed");
             SaveLoadout();
             string dllPath = DllPathTextBox.Text;
             if (string.IsNullOrWhiteSpace(ProcessIdTextBox.Text) || string.IsNullOrWhiteSpace(dllPath) || !File.Exists(dllPath))
@@ -270,7 +271,7 @@ fso.DeleteFile ""{vbsPath}"", True
             var process = Process.GetProcessesByName(ProcessIdTextBox.Text).FirstOrDefault();
             if (process != null)
             {
-                System.Threading.Tasks.Task.Run(() => Inject(dllPath, process.Id));
+                Inject(dllPath, process.Id);
             }
             else
             {
@@ -415,10 +416,11 @@ fso.DeleteFile ""{vbsPath}"", True
                 }
                 if (handle != IntPtr.Zero)
                     CloseHandle(handle);
-                IntPtr windowH = FindWindow(null, "Minecraft");
+
+                IntPtr windowH = FindWindow(null, process.MainWindowTitle);
                 if (windowH == IntPtr.Zero)
                 {
-                    TECTIC("Couldn't get window handle for Minecraft.");
+                    TECTIC($"Couldn't get window handle for process ID {ProcessID}.");
                 }
                 else
                 {
