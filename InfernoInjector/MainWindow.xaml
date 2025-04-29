@@ -23,7 +23,7 @@
         <Border Background="#FF2D2D30" Height="40" VerticalAlignment="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
                 CornerRadius="15,15,0,0">
             <Grid>
-                <TextBlock Text="      Inferno Injector" VerticalAlignment="Center"
+                <TextBlock Text="      Inferno Injector                       Version 1.2" VerticalAlignment="Center"
                            Margin="10,0" Foreground="White" FontSize="16" FontWeight="Bold"/>
                 <Button Content="X"
                         Width="40" Height="40"
